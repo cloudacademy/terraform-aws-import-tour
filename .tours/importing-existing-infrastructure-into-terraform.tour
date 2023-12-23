@@ -4,7 +4,7 @@
   "steps": [
     {
       "directory": "src",
-      "description": "The focus of this lab is importing existing resources into a local Terraform state. \n\nThe AWS VPC used in this lab has been created for you during lab setup. ",
+      "description": "The focus of this lab is importing existing resources into a local Terraform state. \n\nThe AWS VPC used in this lab has been created for you during lab setup. \n\n*Note*: You won't be deploying resources in this lab. Instead, you will learn how to utilize `terraform import` to manage existing AWS resources.",
       "title": "Intro"
     },
     {
@@ -71,29 +71,39 @@
     },
     {
       "directory": "src",
-      "description": "The aws_vpc resource block that was copied to the configuration contains arguments that cannot be managed with Terraform. These are mostly identifier attributes, which can be safely removed.\n\n`Error: Computed attribute cannot be set` \n\n",
-      "title": "Attribute Errors"
+      "description": "The `aws_vpc` resource block that was copied to the configuration contains arguments that cannot be managed with Terraform. These are mostly identifier attributes and tags, which can be safely removed.\n",
+      "title": "Attribute Errors",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 6
+        },
+        "end": {
+          "line": 1,
+          "character": 13
+        }
+      }
     },
     {
       "file": "src/main.tf",
-      "description": "Referencing the error output, remove each attribute that cannot be set.",
+      "description": "Referencing the error output, remove the resource attributes associated with the following errors:\n\n- `Error: Value for unconfigurable attribute`\n- `Error: Computed attribute cannot be set` \n- `Missing required argument`\n- `Invalid or unknown key`\n\n*Note*: Removal of the `ca` tags is optional. The rest of the lab steps assume the only tag associated with the VPC is the **Name = \"Web VPC\"** tag.\n",
       "line": 14,
       "title": "Removing Attributes"
     },
     {
       "file": "src/main.tf",
-      "description": "The entire **main.tf** file should appear like the following when done:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.8.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"dev\" {\n    assign_generated_ipv6_cidr_block = false\n    cidr_block                       = \"192.168.100.0/24\"\n    enable_classiclink               = false\n    enable_classiclink_dns_support   = false\n    enable_dns_hostnames             = true\n    enable_dns_support               = true\n    instance_tenancy                 = \"default\"\n    tags                             = {\n        \"Name\" = \"Web VPC\"\n    }\n}\n```",
+      "description": "The entire **main.tf** file should appear like the following when done:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.8.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"dev\" {\n    assign_generated_ipv6_cidr_block     = false\n    cidr_block                           = \"192.168.100.0/24\"\n    enable_dns_hostnames                 = true\n    enable_dns_support                   = true\n    enable_network_address_usage_metrics = false\n    instance_tenancy                     = \"default\"\n    tags                                 = {\n        \"Name\" = \"Web VPC\"\n    }\n}\n```",
       "line": 1,
       "title": "Review"
     },
     {
       "directory": "src",
-      "description": "Run the following command again to verify the configuration is ready to be configured and deployed.\n\n>> terraform plan\n\nThis time, no errors should appear. The execution plan shows that the AWS resource and Terraform configuration are in sync. \n\n*Note*: In some cases, a `terraform apply` will need to be completed to update certain existing values.\n\nIt is important to understand how each AWS resource is imported into Terraform and highly advised to test before importing production infrastructure. You should not rely on the provider documentation to determine the outcome of the import. ",
+      "description": "Run the following command again to verify the configuration is ready to be configured and deployed.\n\n>> terraform plan\n\nThis time, no errors should appear. The execution plan shows that the AWS resource and Terraform configuration are in sync. \n\n*Note*: In some cases, a `terraform apply` will need to be completed to update certain existing values, e.g. `tags`.\n\nIt is important to understand how each AWS resource is imported into Terraform and highly advised to test before importing production infrastructure. You should not rely on the provider documentation to determine the outcome of the import. ",
       "title": "Plan 2"
     },
     {
       "directory": "src",
-      "description": "Importing existing infrastructure into Terraform can be a tedious process. However, the benefits of managing pre-existing infrastructure with Terraform are great and worth the effort. \n\nReturn to the Cloud Academy Lab browser tab and run the validation check associated with this lab step.\n",
+      "description": "Importing existing infrastructure into Terraform can be a tedious process. However, the benefits of managing pre-existing infrastructure with Terraform are great and worth the effort. \n\nReturn to the Cloud Academy Lab browser tab and complete the lab.",
       "title": "Complete"
     }
   ]
