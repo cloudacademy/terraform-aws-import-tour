@@ -92,7 +92,7 @@
     },
     {
       "file": "src/main.tf",
-      "description": "The entire **main.tf** file should appear like the following when done:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.8.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"dev\" {\n    assign_generated_ipv6_cidr_block     = false\n    cidr_block                           = \"192.168.100.0/24\"\n    enable_dns_hostnames                 = true\n    enable_dns_support                   = true\n    enable_network_address_usage_metrics = false\n    instance_tenancy                     = \"default\"\n    tags                                 = {\n        \"Name\" = \"Web VPC\"\n    }\n}\n```",
+      "description": "The entire **main.tf** file should appear like the following when done:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.8.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"dev\" {\n    assign_generated_ipv6_cidr_block     = false\n    cidr_block                           = \"192.168.100.0/24\"\n    enable_dns_hostnames                 = true\n    enable_dns_support                   = true\n    enable_network_address_usage_metrics = false\n    instance_tenancy                     = \"default\"\n    tags                                 = {\n        \"Name\" = \"Web VPC\"\n        ...\n    }\n    tags_all                             = {\n        \"Name\" = \"Web VPC\"\n        ...\n    }\n}\n```",
       "line": 1,
       "title": "Review"
     },
