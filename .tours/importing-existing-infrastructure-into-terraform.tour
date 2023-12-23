@@ -1,0 +1,100 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Importing Existing Infrastructure into Terraform",
+  "steps": [
+    {
+      "directory": "src",
+      "description": "The focus of this lab is importing existing resources into a local Terraform state. \n\nThe AWS VPC used in this lab has been created for you during lab setup. ",
+      "title": "Intro"
+    },
+    {
+      "file": "src/main.tf",
+      "description": "Click **Insert Code** to insert the empty VPC resource:\n\n```js\nresource \"aws_vpc\" \"dev\" {}\n```\n\nAn empty aws_vpc resource block is created as a placeholder for the existing VPC in AWS. Once the resource is imported into a state file, this resource will need to be modified with the proper argument",
+      "line": 14,
+      "title": "Empty VPC"
+    },
+    {
+      "directory": "src",
+      "description": ">> cd src && terraform init",
+      "title": "Init"
+    },
+    {
+      "directory": "src",
+      "description": "Click the following command to run the AWS CLI `describe-vpcs` command:\n\n>> VpcID=$(aws ec2 describe-vpcs --region us-west-2 --filters Name=tag:Name,Values='Web VPC' --output text --query \"Vpcs[].VpcId\") && echo $VpcID\n\nThe command above calls `describe-vpcs` and stores the VpcID as an environment variable.\n\nTerraform requires the ID of the resource to be imported. In this case, the VPC ID is required since a VPC is being imported. If a Subnet were to be imported, Terraform would require a Subnet ID.\n",
+      "title": "Describe VPCs"
+    },
+    {
+      "directory": "src",
+      "description": "Click the following command to use the Terraform `import` tool:\n\n>> terraform import aws_vpc.dev $VpcID\n\nThe empty `aws_vpc.dev` resource block in the **main.tf** file is mapped to the VPC ID in AWS. A state file is then created with the attributes of the VPC.\n\nThis is why the empty `aws_vpc.dev` resource block needs to be created first. Terraform needs to map the resource ID from the configuration file with the AWS ID.",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 49
+        },
+        "end": {
+          "line": 5,
+          "character": 56
+        }
+      },
+      "title": "Import"
+    },
+    {
+      "directory": "src",
+      "description": "Run the following command in the terminal:\n\n>> terraform show\n\nThe resource block for the VPC is displayed. The `terraform show` command displays human-readable output from the state file.",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 51
+        },
+        "end": {
+          "line": 5,
+          "character": 65
+        }
+      },
+      "title": "Show"
+    },
+    {
+      "directory": "src",
+      "description": "Copy the entire `resource \"aws_vpc\" \"dev\"` block from the previous command.\n\nThe entire resource block will look like the following:\n\n```\nresource \"aws_vpc\" \"dev\" {\n    arn                              = \"arn...\"\n    assign_generated_ipv6_cidr_block = false\n    cidr_block                       = \"192.168.100.0/24\"\n    ...\n}\n```",
+      "title": "Copy Existing VPC Block"
+    },
+    {
+      "file": "src/main.tf",
+      "description": "Replace the empty `aws_vpc` resource with the `aws_vpc` resource definition you copied in the last step.",
+      "line": 14,
+      "title": "Update VPC"
+    },
+    {
+      "directory": "src",
+      "description": "Run the following command to validate the configuration:\n\n>> terraform plan",
+      "title": "Plan 1"
+    },
+    {
+      "directory": "src",
+      "description": "The aws_vpc resource block that was copied to the configuration contains arguments that cannot be managed with Terraform. These are mostly identifier attributes, which can be safely removed.\n\n`Error: Computed attribute cannot be set` \n\n",
+      "title": "Attribute Errors"
+    },
+    {
+      "file": "src/main.tf",
+      "description": "Referencing the error output, remove each attribute that cannot be set.",
+      "line": 14,
+      "title": "Removing Attributes"
+    },
+    {
+      "file": "src/main.tf",
+      "description": "The entire **main.tf** file should appear like the following when done:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.8.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"dev\" {\n    assign_generated_ipv6_cidr_block = false\n    cidr_block                       = \"192.168.100.0/24\"\n    enable_classiclink               = false\n    enable_classiclink_dns_support   = false\n    enable_dns_hostnames             = true\n    enable_dns_support               = true\n    instance_tenancy                 = \"default\"\n    tags                             = {\n        \"Name\" = \"Web VPC\"\n    }\n}\n```",
+      "line": 1,
+      "title": "Review"
+    },
+    {
+      "directory": "src",
+      "description": "Run the following command again to verify the configuration is ready to be configured and deployed.\n\n>> terraform plan\n\nThis time, no errors should appear. The execution plan shows that the AWS resource and Terraform configuration are in sync. \n\n*Note*: In some cases, a `terraform apply` will need to be completed to update certain existing values.\n\nIt is important to understand how each AWS resource is imported into Terraform and highly advised to test before importing production infrastructure. You should not rely on the provider documentation to determine the outcome of the import. ",
+      "title": "Plan 2"
+    },
+    {
+      "directory": "src",
+      "description": "Importing existing infrastructure into Terraform can be a tedious process. However, the benefits of managing pre-existing infrastructure with Terraform are great and worth the effort. \n\nReturn to the Cloud Academy Lab browser tab and run the validation check associated with this lab step.\n",
+      "title": "Complete"
+    }
+  ]
+}
