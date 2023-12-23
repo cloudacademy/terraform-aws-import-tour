@@ -71,7 +71,7 @@
     },
     {
       "directory": "src",
-      "description": "The `aws_vpc` resource block that was copied to the configuration contains arguments that cannot be managed with Terraform. These are mostly identifier attributes and tags, which can be safely removed.\n",
+      "description": "The `aws_vpc` resource block that was copied to the configuration contains attributes that cannot be managed with Terraform. These are mostly identifier attributes and tags, which can be safely removed.\n",
       "title": "Attribute Errors",
       "selection": {
         "start": {
